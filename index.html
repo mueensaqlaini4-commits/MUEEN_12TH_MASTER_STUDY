@@ -1,0 +1,281 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101522">
+<title>UP Board Class 12 Study Hub 2026-27</title>
+<style>
+:root{
+ --bg:#0d1220;--panel:#171f31;--card:#202b40;
+ --text:#f4f6fb;--muted:#aab5c8;--gold:#e8bd62;
+ --line:#34415a;--accent:#8caeff;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);
+ font-family:Arial,"Noto Sans Devanagari",sans-serif}
+header{padding:23px 16px;background:linear-gradient(135deg,#18243c,#30264b);
+ border-bottom:1px solid var(--line)}
+.brand{color:var(--gold);font-size:12px;letter-spacing:3px}
+h1{font-size:25px;margin:9px 0}
+header p{color:var(--muted);font-size:13px}
+nav{display:flex;gap:8px;overflow:auto;padding:12px;
+ background:var(--panel);position:sticky;top:0;z-index:5}
+button,.tab{border:1px solid var(--line);background:var(--card);
+ color:var(--text);padding:10px 14px;border-radius:10px;
+ white-space:nowrap;cursor:pointer}
+button.active,.tab.active{background:var(--gold);color:#171717}
+main{max-width:900px;margin:auto;padding:15px}
+.search{width:100%;padding:14px;border-radius:12px;
+ border:1px solid var(--line);background:var(--panel);
+ color:var(--text);font-size:15px;margin:8px 0 16px}
+.subjects{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.subject{padding:16px;background:var(--panel);border:1px solid var(--line);
+ border-radius:14px;cursor:pointer}
+.subject strong{display:block;color:var(--gold);margin-bottom:7px}
+.subject small{color:var(--muted)}
+.section-title{font-size:19px;margin:22px 0 12px}
+.lesson{background:var(--panel);border:1px solid var(--line);
+ border-radius:13px;padding:15px;margin:10px 0;cursor:pointer}
+.lesson h3{font-size:16px;margin:0 0 7px}
+.lesson p{color:var(--muted);font-size:13px;margin:0}
+.content{background:var(--panel);border:1px solid var(--line);
+ border-radius:15px;padding:17px;margin-top:14px;line-height:1.9}
+.content h2{color:var(--gold);font-size:21px}
+.content h3{color:var(--accent);margin-top:22px}
+.content p{color:#e1e6ef}
+.content li{margin:8px 0}
+.back{margin:12px 0}
+textarea{width:100%;min-height:120px;padding:12px;
+ border-radius:10px;background:var(--bg);color:var(--text);
+ border:1px solid var(--line);font:inherit}
+footer{text-align:center;padding:25px;color:var(--muted);font-size:12px}
+.hidden{display:none}
+@media(max-width:480px){
+ .subjects{grid-template-columns:1fr}
+ h1{font-size:22px}
+}
+</style>
+</head>
+<body>
+<header>
+ <div class="brand">MUEEN PRESENTS</div>
+ <h1>UP BOARD CLASS 12</h1>
+ <strong>STUDY HUB 2026–27</strong>
+ <p>हिंदी माध्यम • विस्तृत अध्ययन • अभ्यास • नोट्स</p>
+</header>
+
+<nav>
+ <button class="active" onclick="showHome(this)">होम</button>
+ <button onclick="showNotes(this)">मेरे नोट्स</button>
+ <button onclick="toggleTheme()">थीम बदलें</button>
+</nav>
+
+<main>
+ <section id="home">
+  <input class="search" id="search" placeholder="पाठ या विषय खोजें..." oninput="searchLessons()">
+
+  <h2 class="section-title">अपने विषय चुनें</h2>
+  <div class="subjects">
+   <div class="subject" onclick="openSubject('english')">
+    <strong>English (117)</strong><small>Flamingo + Vistas</small>
+   </div>
+   <div class="subject" onclick="openSubject('hindi')">
+    <strong>हिंदी (101)</strong><small>गद्य, पद्य, कहानी, खंडकाव्य</small>
+   </div>
+   <div class="subject" onclick="openSubject('general')">
+    <strong>सामान्य हिंदी (102)</strong><small>पाठ्यक्रम और भाषा अध्ययन</small>
+   </div>
+   <div class="subject" onclick="openSubject('sanskrit')">
+    <strong>संस्कृत (103)</strong><small>गद्य, पद्य, नाटक, व्याकरण</small>
+   </div>
+  </div>
+  <div id="lessonList"></div>
+ </section>
+
+ <section id="reader" class="hidden">
+  <button class="back" onclick="showHome()">← विषय सूची</button>
+  <div id="lessonContent" class="content"></div>
+ </section>
+
+ <section id="notes" class="hidden">
+  <h2 class="section-title">मेरे नोट्स</h2>
+  <p>अपने महत्वपूर्ण नोट्स यहाँ लिखें। वे इसी फोन के ब्राउज़र में सेव रहेंगे।</p>
+  <textarea id="noteText" placeholder="यहाँ अपने नोट्स लिखें..."></textarea>
+  <button onclick="saveNotes()">नोट्स सेव करें</button>
+  <p id="savedMessage"></p>
+ </section>
+</main>
+
+<footer>
+ UP Board Class 12 • Session 2026–27<br>
+ Educational Study Project • Developer: MUEEN
+</footer>
+
+<script>
+const syllabus = {
+ english:{
+  name:"English (117)",
+  groups:{
+   "Flamingo – Prose":[
+    "The Last Lesson","Lost Spring","Deep Water","The Rattrap",
+    "Indigo","Poets and Pancakes","The Interview","Going Places"
+   ],
+   "Flamingo – Poetry":[
+    "My Mother at Sixty-Six",
+    "An Elementary School Classroom in a Slum",
+    "Keeping Quiet","A Thing of Beauty","A Roadside Stand"
+   ],
+   "Vistas":[
+    "The Third Level","The Tiger King",
+    "Journey to the End of the Earth","The Enemy",
+    "On the Face of It","Memories of Childhood"
+   ]
+  }
+ },
+ hindi:{
+  name:"हिंदी (101)",
+  groups:{
+   "गद्य साहित्य":[
+    "राष्ट्र का स्वरूप","रॉबर्ट नर्सिंग होम में","अशोक के फूल",
+    "सिद्धांत और नीति","भाषा और आधुनिकता",
+    "डॉ. ए.पी.जे. अब्दुल कलाम","तेजस्वी मन",
+    "भाग्य और पुरुषार्थ"
+   ],
+   "काव्य साहित्य":[
+    "प्रेम माधुरी","यमुना-छवि","उद्धव प्रसंग","गंगावतरण",
+    "पवन दूतिका","कैकेयी का अनुताप","बादल-राग",
+    "संध्या-सुन्दरी","नौका विहार","बापू के प्रति",
+    "अभिनव-मनुष्य","हिरोशिमा"
+   ],
+   "कहानी":[
+    "पंचलाइट","खून का रिश्ता","लाटी","कर्मनाशा की हार"
+   ],
+   "खंडकाव्य":["सत्य की जीत"],
+   "संस्कृत खंड":["भोजस्यौदार्यम्","संस्कृत भाषायाः महत्त्वम्",
+    "ऋतुवर्णनम्","जातक कथा","नृपतिः दिलीपः",
+    "महर्षि दयानन्दः","सुभाषित रत्नानि",
+    "महामना मालवीयः","पंचशीलसिद्धान्ताः","दूतवाक्यम्"]
+  }
+ },
+ general:{
+  name:"सामान्य हिंदी (102)",
+  groups:{
+   "पाठ्यक्रम सामग्री":[
+    "आधिकारिक पाठ्यक्रम के अनुसार पाठ जोड़े जाएँगे"
+   ],
+   "भाषा एवं लेखन":[
+    "निबंध लेखन","पत्र लेखन","अपठित गद्यांश",
+    "व्याकरण अभ्यास","शब्द ज्ञान"
+   ]
+  }
+ },
+ sanskrit:{
+  name:"संस्कृत (103)",
+  groups:{
+   "गद्य":[
+    "कादम्बरी – चन्द्रापीडकथा"
+   ],
+   "पद्य":[
+    "रघुवंश महाकाव्य – द्वितीय सर्ग"
+   ],
+   "नाटक":[
+    "अभिज्ञानशाकुन्तलम् – चतुर्थ अंक"
+   ],
+   "निबंध":[
+    "सदाचारः","सत्संगतिः","परोपकारः",
+    "विद्याधनं सर्वधनप्रधानम्",
+    "संस्कृतभाषायाः महत्त्वम्",
+    "पर्यावरण सुरक्षा","महाकवि कालिदासः",
+    "अहिंसा परमो धर्मः","भारतदेशः",
+    "स्वच्छता अभियानम्"
+   ],
+   "व्याकरण":[
+    "सन्धि","समास","कारक एवं विभक्ति",
+    "शब्दरूप","धातुरूप","प्रत्यय","वाच्य परिवर्तन"
+   ]
+  }
+ }
+};
+
+let currentSubject="";
+function showHome(btn){
+ document.getElementById("home").classList.remove("hidden");
+ document.getElementById("reader").classList.add("hidden");
+ document.getElementById("notes").classList.add("hidden");
+ document.getElementById("lessonList").innerHTML="";
+}
+function showNotes(){
+ document.getElementById("home").classList.add("hidden");
+ document.getElementById("reader").classList.add("hidden");
+ document.getElementById("notes").classList.remove("hidden");
+ document.getElementById("noteText").value=localStorage.getItem("mueenNotes")||"";
+}
+function saveNotes(){
+ localStorage.setItem("mueenNotes",document.getElementById("noteText").value);
+ document.getElementById("savedMessage").textContent="नोट्स सेव हो गए।";
+}
+function toggleTheme(){
+ const root=document.documentElement;
+ const dark=getComputedStyle(root).getPropertyValue("--bg").trim()==="#0d1220";
+ if(dark){
+  root.style.setProperty("--bg","#f1f3f8");
+  root.style.setProperty("--panel","#ffffff");
+  root.style.setProperty("--card","#e8edf5");
+  root.style.setProperty("--text","#172033");
+  root.style.setProperty("--muted","#596579");
+  root.style.setProperty("--line","#d2d9e5");
+ }else{
+  location.reload();
+ }
+}
+function openSubject(key){
+ currentSubject=key;
+ const subject=syllabus[key];
+ let html='<h2 class="section-title">'+subject.name+'</h2>';
+ for(const group in subject.groups){
+  html+='<h3 class="section-title">'+group+'</h3>';
+  subject.groups[group].forEach((lesson,index)=>{
+   html+='<div class="lesson" onclick="openLesson('+JSON.stringify(key)+','+
+    JSON.stringify(group)+','+JSON.stringify(lesson)+')">'+
+    '<h3>'+(index+1)+'. '+lesson+'</h3><p>पाठ खोलने के लिए दबाएँ</p></div>';
+  });
+ }
+ document.getElementById("lessonList").innerHTML=html;
+}
+function openLesson(key,group,lesson){
+ document.getElementById("home").classList.add("hidden");
+ document.getElementById("reader").classList.remove("hidden");
+ document.getElementById("lessonContent").innerHTML=
+  '<h2>'+lesson+'</h2><p><b>विषय:</b> '+syllabus[key].name+
+  '</p><p><b>खंड:</b> '+group+'</p>'+
+  '<h3>विस्तृत अध्ययन सामग्री</h3>'+
+  '<p>इस पाठ की विस्तृत मौलिक व्याख्या, प्रसंग, केंद्रीय भाव, लेखक या कवि परिचय, शब्दार्थ और परीक्षा उपयोगी प्रश्न-उत्तर अगले सामग्री भागों में जोड़े जाएँगे।</p>'+
+  '<h3>अध्ययन के मुख्य बिंदु</h3>'+
+  '<ul><li>पाठ का मुख्य विषय समझें।</li><li>महत्वपूर्ण शब्दों के अर्थ लिखें।</li><li>पाठ का सार अपने शब्दों में तैयार करें।</li></ul>'+
+  '<h3>अभ्यास</h3>'+
+  '<p>1. इस पाठ का केंद्रीय विचार क्या है?</p>'+
+  '<p>2. पाठ से मिलने वाली शिक्षा लिखिए।</p>'+
+  '<p>3. पाठ के मुख्य पात्र या विचारों का वर्णन कीजिए।</p>';
+}
+function searchLessons(){
+ const q=document.getElementById("search").value.toLowerCase();
+ if(!q){document.getElementById("lessonList").innerHTML="";return;}
+ let html="";
+ for(const key in syllabus){
+  for(const group in syllabus[key].groups){
+   syllabus[key].groups[group].forEach(lesson=>{
+    if(lesson.toLowerCase().includes(q)){
+     html+='<div class="lesson" onclick="openLesson('+JSON.stringify(key)+','+
+      JSON.stringify(group)+','+JSON.stringify(lesson)+')"><h3>'+lesson+
+      '</h3><p>'+syllabus[key].name+' • '+group+'</p></div>';
+    }
+   });
+  }
+ }
+ document.getElementById("lessonList").innerHTML=html||"<p>कोई पाठ नहीं मिला।</p>";
+}
+</script>
+</body>
+</html>
