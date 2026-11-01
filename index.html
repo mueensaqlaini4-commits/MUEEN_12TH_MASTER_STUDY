@@ -65,17 +65,14 @@ footer{text-align:center;padding:25px;color:var(--muted);font-size:12px}
  <strong>STUDY HUB 2026–27</strong>
  <p>हिंदी माध्यम • विस्तृत अध्ययन • अभ्यास • नोट्स</p>
 </header>
-
 <nav>
  <button class="active" onclick="showHome(this)">होम</button>
  <button onclick="showNotes(this)">मेरे नोट्स</button>
  <button onclick="toggleTheme()">थीम बदलें</button>
 </nav>
-
 <main>
  <section id="home">
   <input class="search" id="search" placeholder="पाठ या विषय खोजें..." oninput="searchLessons()">
-
   <h2 class="section-title">अपने विषय चुनें</h2>
   <div class="subjects">
    <div class="subject" onclick="openSubject('english')">
@@ -93,12 +90,10 @@ footer{text-align:center;padding:25px;color:var(--muted);font-size:12px}
   </div>
   <div id="lessonList"></div>
  </section>
-
  <section id="reader" class="hidden">
   <button class="back" onclick="showHome()">← विषय सूची</button>
   <div id="lessonContent" class="content"></div>
  </section>
-
  <section id="notes" class="hidden">
   <h2 class="section-title">मेरे नोट्स</h2>
   <p>अपने महत्वपूर्ण नोट्स यहाँ लिखें। वे इसी फोन के ब्राउज़र में सेव रहेंगे।</p>
@@ -107,14 +102,11 @@ footer{text-align:center;padding:25px;color:var(--muted);font-size:12px}
   <p id="savedMessage"></p>
  </section>
 </main>
-
 <footer>
  UP Board Class 12 • Session 2026–27<br>
  Educational Study Project • Developer: MUEEN
 </footer>
-
 <script>
- 
 const englishDetailed = {
  "The Last Lesson": {
   author: "Alphonse Daudet",
@@ -271,13 +263,11 @@ const englishDetailed = {
   ]
  }
 };
-
 function showDetailedEnglish(lesson){
  const data=englishDetailed[lesson];
  if(!data)return;
  document.getElementById("home").classList.add("hidden");
  document.getElementById("reader").classList.remove("hidden");
-
  let html=`<h2>${data.titleHindi} — ${lesson}</h2>
  <p><b>लेखक:</b> ${data.author}</p>
  <h3>1. विस्तृत हिंदी सारांश</h3>
@@ -285,7 +275,6 @@ function showDetailedEnglish(lesson){
  <h3>2. पाठ की व्याख्या</h3>
  <p>${data.explanation.replace(/\n/g,"</p><p>")}</p>
  <h3>3. मुख्य पात्र</h3><ul>`;
-
  data.characters.forEach(x=>html+=`<li>${x}</li>`);
  html+=`</ul><h3>4. महत्वपूर्ण शब्दार्थ</h3><ul>`;
  data.words.forEach(x=>html+=`<li><b>${x[0]}</b> — ${x[1]}</li>`);
@@ -383,7 +372,6 @@ const syllabus = {
   }
  }
 };
-
 let currentSubject="";
 function showHome(btn){
  document.getElementById("home").classList.remove("hidden");
