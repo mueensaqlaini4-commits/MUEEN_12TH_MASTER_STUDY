@@ -1,0 +1,627 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KAGEVERSE - The Zero King</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#080a13;color:white;font-family:Arial,sans-serif}
+header{padding:17px;display:flex;justify-content:space-between;background:#121629;position:sticky;top:0;z-index:5;border-bottom:1px solid #343951}
+.logo{font-size:24px;font-weight:900;color:#a69aff}
+.hero{padding:35px 20px;background:radial-gradient(circle at 80% 30%,#563a91,#17142d 45%,#080a13);min-height:300px}
+.hero h1{font-size:42px;margin:15px 0}
+.hero p{color:#ccc;line-height:1.8}
+button{background:#7969ef;color:white;border:0;border-radius:8px;padding:11px 15px;cursor:pointer;font-weight:bold}
+section{padding:22px 15px}
+h2{font-size:21px}
+.muted{color:#a0a1b6;font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.card{background:#171b2d;border:1px solid #333951;border-radius:12px;overflow:hidden;text-align:center}
+.art{height:160px;display:flex;align-items:center;justify-content:center;font-size:65px;background:linear-gradient(145deg,#39245b,#111a35)}
+.card h3{font-size:14px}
+.card p{font-size:11px;color:#aaa;padding:0 7px}
+.stage{background:#171b2d;border:1px solid #363b58;border-radius:14px;text-align:center;padding:20px}
+.stage .figure{font-size:100px;animation:float 2s infinite}
+@keyframes float{50%{transform:translateY(-10px)}}
+.glow{filter:drop-shadow(0 0 18px #8a72ff)}
+.shake{animation:shake .3s infinite}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.actions{display:flex;gap:8px;overflow:auto;padding:12px 0}
+.actions button{white-space:nowrap;background:#292e46}
+.actions button.active{background:#816dff}
+.episode-list{display:grid;gap:9px}
+.ep{background:#171b2d;border:1px solid #333951;border-radius:9px;padding:14px;cursor:pointer}
+.ep.active{border-color:#a18cff;background:#242044}
+.ep small{color:#aaa}
+.reader{display:none;position:fixed;inset:0;background:#090b15;z-index:20;overflow:auto;padding:20px}
+.reader-inner{max-width:750px;margin:auto}
+.reader h1{font-size:28px;color:#b4a6ff}
+.reader p{white-space:pre-line;line-height:2;font-size:17px;color:#e0e0e9}
+.reader-controls{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.reader-controls button{margin:5px 0}
+.badge{color:#c1b6ff;font-size:12px;letter-spacing:2px}
+footer{text-align:center;padding:30px;color:#777}
+@media(max-width:500px){.grid{grid-template-columns:repeat(2,1fr)}.art{height:140px}}
+</style>
+</head>
+<body>
+
+<header>
+ <div class="logo">KAGEVERSE</div>
+ <span class="muted">ORIGINAL ANIME</span>
+</header>
+
+<div class="hero">
+ <div class="badge">DARK FANTASY • SEASON 01</div>
+ <h1>THE ZERO KING</h1>
+ <h3>एक कमजोर लड़का, सात साम्राज्य और एक अजेय राजा।</h3>
+ <p>जिसके पास कोई शक्ति नहीं थी, शायद वही इस दुनिया की सबसे बड़ी शक्ति है।</p>
+ <button onclick="document.getElementById('episodes').scrollIntoView()">▶ START ANIME</button>
+</div>
+
+<section>
+<h2>⚔️ Main Characters</h2>
+<div class="grid">
+ <div class="card">
+  <div class="art">🧑🏻</div>
+  <h3>ARYAN</h3><p>The Zero Boy</p>
+  <p>शुरुआत: Level 000</p>
+ </div>
+ <div class="card">
+  <div class="art">👑</div>
+  <h3>VORAKH</h3><p>The Zero King</p>
+  <p>Power: Reality Erasure</p>
+ </div>
+ <div class="card">
+  <div class="art">🧝🏻‍♀️</div>
+  <h3>LYRA</h3><p>Forgotten Knight</p>
+  <p>Power: Time Fragments</p>
+ </div>
+</div>
+</section>
+
+<section>
+<h2>🔥 Action Studio</h2>
+<div class="stage">
+ <div class="figure" id="figure">🧑🏻</div>
+ <h3 id="fighter">ARYAN</h3>
+ <p id="powerText" class="muted">Level 000 • No Power</p>
+</div>
+<div class="actions">
+ <button class="active" onclick="action('normal',this)">Normal</button>
+ <button onclick="action('power',this)">Awakening</button>
+ <button onclick="action('attack',this)">Attack</button>
+ <button onclick="action('defence',this)">Defence</button>
+ <button onclick="action('ultimate',this)">Ultimate</button>
+</div>
+</section>
+
+<section id="episodes">
+<h2>📖 SEASON 01 - THE ZERO KING</h2>
+<p class="muted">12 Episodes • Hindi Original Story</p>
+<div class="episode-list" id="episodeList"></div>
+</section>
+
+<div class="reader" id="reader">
+ <div class="reader-inner">
+  <div class="reader-controls">
+   <button onclick="closeReader()">← Back</button>
+   <span class="badge">KAGEVERSE ORIGINAL</span>
+  </div>
+  <h1 id="readTitle"></h1>
+  <p id="readText"></p>
+  <div class="reader-controls">
+   <button onclick="previous()">← Previous</button>
+   <button onclick="next()">Next Episode →</button>
+  </div>
+  <p class="muted" id="episodeNumber"></p>
+ </div>
+</div>
+
+<footer>
+<h2 class="logo">KAGEVERSE</h2>
+THE ZERO KING<br>
+Original Anime Universe
+</footer>
+
+<script>
+const episodes=[
+{
+title:"Episode 01 - The Weakest Birth",
+text:`अध्याय 1: सबसे कमजोर जन्म
+
+दुनिया का नाम था एस्टेरिया।
+
+इस दुनिया में हर बच्चे के जन्म के समय उसकी आत्मा का स्तर जाँचा जाता था। किसी के पास आग की शक्ति थी, किसी के पास बिजली और किसी के पास समय को धीमा करने की क्षमता।
+
+लेकिन आर्यन के जन्म के दिन एक अजीब घटना हुई।
+
+उसके सामने लगा शक्ति-परीक्षण पत्थर पूरी तरह काला हो गया।
+
+उस पर केवल तीन अंक दिखाई दिए।
+
+000
+
+शून्य।
+
+सोलह साल बाद भी आर्यन के पास कोई शक्ति नहीं थी।
+
+उसका मजाक उड़ाया जाता था। उसकी कक्षा के बच्चे उसे कमजोर कहते थे।
+
+एक दिन प्रशिक्षण मैदान में एक लड़के ने उसे चुनौती दी।
+
+आर्यन ने पूरी ताकत लगाई, लेकिन कुछ ही सेकंड में जमीन पर गिर गया।
+
+उस दिन उसने पहली बार महसूस किया कि केवल मेहनत से सब कुछ हासिल नहीं होता।
+
+रात को घर लौटते समय उसे एक पुराना मंदिर दिखाई दिया।
+
+मंदिर के अंदर एक आवाज आई।
+
+"तुम्हें अपनी कमजोरी से डर लगता है?"
+
+आर्यन ने कहा, "हाँ।"
+
+आवाज बोली:
+
+"तो फिर अभी तुमने कुछ सीखा ही नहीं है।"
+
+और उसके सामने एक बंद दरवाजा खुल गया।`
+},
+{
+title:"Episode 02 - The First Defeat",
+text:`अध्याय 2: पहली हार
+
+अगले दिन एस्टेरिया की राजधानी में एक बड़ा समारोह हुआ।
+
+सभी योद्धा सात साम्राज्यों के राजा के सामने अपनी शक्तियों का प्रदर्शन करने वाले थे।
+
+अचानक आसमान काला हो गया।
+
+एक विशाल सिंहासन बादलों के बीच दिखाई दिया।
+
+उस पर बैठा था VORAKH।
+
+दुनिया का सबसे शक्तिशाली राजा।
+
+उसकी उपस्थिति मात्र से सभी योद्धाओं की शक्तियाँ कमजोर पड़ने लगीं।
+
+उसने अपना हाथ उठाया।
+
+राजधानी के बीच खड़ा विशाल शक्ति-स्तंभ गायब हो गया।
+
+न कोई विस्फोट हुआ, न कोई आवाज।
+
+वह बस अस्तित्व से मिट गया।
+
+आर्यन ने उसे देखकर कहा:
+
+"क्या कोई इतना शक्तिशाली हो सकता है?"
+
+VORAKH ने नीचे देखा।
+
+उसकी नजर सीधे आर्यन पर पड़ी।
+
+"यह शून्य स्तर वाला लड़का कौन है?"
+
+एक पल के लिए उसकी आँखों में डर दिखाई दिया।
+
+फिर उसने कहा:
+
+"इसे जीवित रहने दो। अभी इसका समय नहीं आया।"
+
+वह गायब हो गया।
+
+लेकिन आर्यन समझ चुका था कि उसकी जिंदगी अब पहले जैसी नहीं रहेगी।`
+},
+{
+title:"Episode 03 - The Forgotten Door",
+text:`अध्याय 3: भूला हुआ दरवाजा
+
+आर्यन दोबारा उस पुराने मंदिर में गया।
+
+इस बार दरवाजे के पीछे एक विशाल कमरा था।
+
+दीवारों पर हजारों नाम लिखे थे।
+
+एक बूढ़ा व्यक्ति अंधेरे से बाहर आया।
+
+"मेरा नाम कैरॉन है। मैं उन लोगों में से हूँ जिन्हें दुनिया भूल चुकी है।"
+
+आर्यन ने पूछा, "क्या आप मुझे शक्तिशाली बना सकते हैं?"
+
+कैरॉन हँसा।
+
+"नहीं। मैं तुम्हें यह सिखा सकता हूँ कि शक्ति वास्तव में होती क्या है।"
+
+उसने आर्यन के सामने एक छोटी सी आग जलाई।
+
+"इसे बुझाओ।"
+
+आर्यन ने कोशिश की। वह असफल रहा।
+
+कैरॉन बोला:
+
+"तुम आग से लड़ रहे हो। पहले समझो कि आग जलती क्यों है।"
+
+आर्यन ने घंटों तक आग को देखा।
+
+पहली बार उसे महसूस हुआ कि हर शक्ति के पीछे एक नियम होता है।
+
+और शायद उन नियमों को समझना ही उसकी असली शुरुआत थी।`
+},
+{
+title:"Episode 04 - The Price of Power",
+text:`अध्याय 4: शक्ति की कीमत
+
+कैरॉन ने आर्यन को एक छोटा पत्थर दिया।
+
+"इसे उठाओ।"
+
+पत्थर साधारण दिखाई देता था, लेकिन उसमें ऊर्जा भरी थी।
+
+आर्यन ने उसे छुआ।
+
+अचानक उसकी आँखों के सामने पत्थर की ऊर्जा का प्रवाह दिखाई देने लगा।
+
+उसे समझ आया कि पत्थर की शक्ति एक निश्चित चक्र में घूमती है।
+
+उसने उस चक्र को एक पल के लिए रोक दिया।
+
+पत्थर की चमक गायब हो गई।
+
+आर्यन खुश हुआ।
+
+लेकिन कुछ ही क्षण बाद वह अपनी सबसे प्यारी बचपन की याद भूल गया।
+
+कैरॉन ने गंभीर आवाज में कहा:
+
+"तुम्हारी क्षमता का मूल्य तुम्हारी यादें हैं। जितना अधिक नियम बदलोगे, उतना अधिक अपने अतीत को खो सकते हो।"
+
+आर्यन के सामने पहली बार असली चुनाव था।
+
+शक्ति या उसकी अपनी पहचान।`
+},
+{
+title:"Episode 05 - The Shadow Teacher",
+text:`अध्याय 5: रहस्यमयी गुरु
+
+कैरॉन ने आर्यन को बताया कि दुनिया में सात प्राचीन नियम हैं।
+
+जो उन्हें समझ लेगा, वह किसी भी योद्धा को चुनौती दे सकता है।
+
+लेकिन उन नियमों को सीखने वाला आखिरी व्यक्ति सदियों पहले गायब हो चुका था।
+
+उस रात मंदिर में एक अजनबी आया।
+
+उसने काले कपड़े पहन रखे थे।
+
+वह बोला:
+
+"कैरॉन, तुमने फिर किसी बच्चे को झूठी उम्मीद दे दी।"
+
+कैरॉन ने उसे देखकर कहा:
+
+"तुम वापस क्यों आए हो?"
+
+अजनबी ने आर्यन की तरफ देखा।
+
+"क्योंकि यह लड़का उस राजा की गलती है।"
+
+उसने अपना नाम बताया।
+
+निराक।
+
+लेकिन आर्यन को उसकी आँखों में कुछ ऐसा दिखाई दिया जो उसने VORAKH में भी नहीं देखा था।`
+},
+{
+title:"Episode 06 - The Broken Kingdom",
+text:`अध्याय 6: टूटा हुआ साम्राज्य
+
+आर्यन और Lyra एक पुराने साम्राज्य पहुँचे।
+
+वहाँ सभी योद्धाओं की शक्तियाँ गायब हो चुकी थीं।
+
+शहर के बीच एक विशाल काला स्तंभ था।
+
+Lyra ने कहा:
+
+"यह VORAKH की सेना का निशान है।"
+
+अचानक स्तंभ से एक योद्धा बाहर आया।
+
+उसका नाम DRAKON था।
+
+वह Level 900 का सैनिक था।
+
+आर्यन ने मुकाबला किया, लेकिन उसकी सारी कोशिशें बेकार रहीं।
+
+DRAKON ने कहा:
+
+"शून्य स्तर वाले इंसान, तुम मेरे सामने कितनी देर टिकोगे?"
+
+आर्यन हार गया।
+
+लेकिन इस बार उसे समझ आया कि विरोधी की शक्ति कहाँ से आ रही थी।
+
+उसने उसकी गति का नियम पहचान लिया।
+
+पहली बार उसने एक हमले को रोक लिया।
+
+DRAKON पीछे हट गया।
+
+आर्यन अभी भी कमजोर था, लेकिन अब वह पहले जैसा नहीं था।`
+},
+{
+title:"Episode 07 - The King's Army",
+text:`अध्याय 7: राजा की सेना
+
+VORAKH के सात सेनापति थे।
+
+हर सेनापति के पास एक ऐसा नियम था जिसे साधारण योद्धा समझ भी नहीं सकता था।
+
+पहला सेनापति आग को नियंत्रित नहीं करता था, बल्कि तापमान के अस्तित्व को बदल सकता था।
+
+दूसरा सेनापति दूरी को अपनी इच्छा से बदलता था।
+
+तीसरा सेनापति लोगों की यादों से उनके नाम मिटा सकता था।
+
+VORAKH ने अपने सेनापतियों से कहा:
+
+"शून्य लड़के को मेरे पास लाओ।"
+
+एक सेनापति ने पूछा:
+
+"महाराज, आप स्वयं उसे क्यों नहीं मिटा देते?"
+
+VORAKH मुस्कुराया।
+
+"क्योंकि शून्य ही वह चीज है जिसे मैं समाप्त नहीं कर सकता।"
+
+उसी रात आर्यन ने अपने हाथ पर एक नया निशान देखा।
+
+वह सातवें नियम का पहला संकेत था।`
+},
+{
+title:"Episode 08 - The Lost Ability",
+text:`अध्याय 8: खोई हुई शक्ति
+
+आर्यन की शक्ति धीरे-धीरे बढ़ रही थी।
+
+लेकिन एक दिन उसने महसूस किया कि उसे अपनी माँ का चेहरा याद नहीं आ रहा।
+
+उसने कैरॉन से पूछा:
+
+"क्या मैं सब कुछ भूल जाऊँगा?"
+
+कैरॉन ने जवाब दिया:
+
+"अगर तुम इसी रास्ते पर चलते रहे तो संभव है।"
+
+आर्यन ने अपनी शक्ति का इस्तेमाल करना बंद कर दिया।
+
+लेकिन तभी VORAKH का एक सेनापति Lyra को पकड़ने आ गया।
+
+आर्यन के सामने कठिन फैसला था।
+
+वह भाग सकता था या अपनी बची हुई यादों को जोखिम में डाल सकता था।
+
+उसने अपनी शक्ति का इस्तेमाल किया।
+
+इस बार उसने विरोधी का नियम नहीं बदला।
+
+उसने खुद के लिए एक नया नियम बनाया।
+
+और उसकी सारी ऊर्जा एक साथ गायब हो गई।
+
+वह बेहोश होकर गिर पड़ा।`
+},
+{
+title:"Episode 09 - The Awakening",
+text:`अध्याय 9: असली जागरण
+
+आर्यन ने एक अजीब दुनिया में आँखें खोलीं।
+
+वहाँ न सूरज था, न चाँद।
+
+सिर्फ अनंत दरवाजे थे।
+
+एक दरवाजे के पीछे उसे अपना बचपन दिखाई दिया।
+
+दूसरे के पीछे VORAKH का सिंहासन था।
+
+तीसरे दरवाजे पर लिखा था:
+
+ZERO ORIGIN
+
+जैसे ही उसने उसे छुआ, एक आवाज आई।
+
+"तुम शक्ति नहीं हो। तुम वह सीमा हो जिसके भीतर सभी शक्तियाँ जन्म लेती हैं।"
+
+आर्यन की आँखें नीली हो गईं।
+
+उसके शरीर पर नया निशान उभर आया।
+
+Level 001।
+
+यह दुनिया का सबसे छोटा स्तर था।
+
+लेकिन पहली बार शून्य ने अपनी पहचान खोज ली थी।`
+},
+{
+title:"Episode 10 - The Seven Seals",
+text:`अध्याय 10: सात मुहरें
+
+कैरॉन ने बताया कि सात मुहरें सात साम्राज्यों में छिपी हैं।
+
+हर मुहर एक प्राचीन नियम को नियंत्रित करती है।
+
+पहली मुहर ऊर्जा की थी।
+
+दूसरी दूरी की।
+
+तीसरी समय की।
+
+चौथी स्मृति की।
+
+पाँचवीं अस्तित्व की।
+
+छठी जीवन की।
+
+और सातवीं शून्य की।
+
+VORAKH ने छह मुहरों पर अधिकार कर लिया था।
+
+सिर्फ सातवीं मुहर गायब थी।
+
+आर्यन ने पूछा:
+
+"वह कहाँ है?"
+
+कैरॉन ने जवाब दिया:
+
+"वह किसी स्थान पर नहीं है।"
+
+उसने आर्यन के सीने की तरफ इशारा किया।
+
+"वह तुम्हारे जन्म के साथ आई थी।"`
+},
+{
+title:"Episode 11 - The Zero War",
+text:`अध्याय 11: शून्य का युद्ध
+
+सातों साम्राज्यों में युद्ध शुरू हो चुका था।
+
+VORAKH अपने सिंहासन से उठा।
+
+उसकी उपस्थिति से आसमान में दरारें दिखाई देने लगीं।
+
+आर्यन अब Level 050 तक पहुँच चुका था।
+
+वह पहले से कहीं अधिक शक्तिशाली था।
+
+लेकिन VORAKH के सामने उसकी शक्तियाँ बेकार साबित हुईं।
+
+राजा ने कहा:
+
+"तुम अभी भी नहीं समझे। मैं नियमों को नहीं बदलता। मैं उन चीजों का अस्तित्व ही समाप्त कर देता हूँ।"
+
+आर्यन ने जवाब दिया:
+
+"तो मैं वह नियम खोजूँगा जिसके कारण तुम अस्तित्व में हो।"
+
+दोनों की शक्तियाँ टकराईं।
+
+पूरी दुनिया की रोशनी कुछ क्षण के लिए गायब हो गई।
+
+जब रोशनी वापस आई, आर्यन जमीन पर था।
+
+VORAKH उसके सामने खड़ा था।
+
+"अभी तुम्हारी कहानी खत्म नहीं हुई।"`
+},
+{
+title:"Episode 12 - The Real Beginning",
+text:`अध्याय 12: असली शुरुआत
+
+VORAKH ने आर्यन को खत्म नहीं किया।
+
+उसने उसे एक पुरानी किताब दी।
+
+उसके पहले पन्ने पर आर्यन का नाम लिखा था।
+
+लेकिन आखिरी पन्ने पर VORAKH का नाम था।
+
+आर्यन ने पूछा:
+
+"तुम्हारा नाम मेरी किताब में क्यों है?"
+
+VORAKH ने जवाब दिया:
+
+"क्योंकि मैं तुम्हारा दुश्मन नहीं हूँ। मैं तुम्हारे पिछले जन्म का परिणाम हूँ।"
+
+आर्यन चुप हो गया।
+
+राजा ने आगे कहा:
+
+"तुमने ही कभी इस दुनिया को शून्य में बदलने का फैसला किया था। मैं उस फैसले को पूरा करने आया हूँ।"
+
+अचानक किताब के पन्ने अपने आप पलटने लगे।
+
+एक नया वाक्य दिखाई दिया:
+
+THE ZERO KING WAS NEVER THE FINAL ENEMY.
+
+दूर एक और सिंहासन दिखाई दिया।
+
+उस पर कोई बैठा था।
+
+और पहली बार VORAKH ने अपना सिर झुका लिया।
+
+सीज़न 1 समाप्त।
+
+असली कहानी अब शुरू होती है।`
+}
+];
+
+let current=0;
+const list=document.getElementById("episodeList");
+
+function buildEpisodes(){
+ list.innerHTML=episodes.map((e,i)=>`
+ <div class="ep" id="ep${i}" onclick="openEpisode(${i})">
+ <b>${e.title}</b><br><small>Season 01 • Episode ${i+1}</small>
+ </div>`).join("");
+}
+function openEpisode(i){
+ current=i;
+ document.querySelectorAll(".ep").forEach(x=>x.classList.remove("active"));
+ document.getElementById("ep"+i).classList.add("active");
+ document.getElementById("reader").style.display="block";
+ document.getElementById("readTitle").innerText=episodes[i].title;
+ document.getElementById("readText").innerText=episodes[i].text;
+ document.getElementById("episodeNumber").innerText=
+ "Episode "+(i+1)+" / "+episodes.length;
+}
+function closeReader(){
+ document.getElementById("reader").style.display="none";
+}
+function next(){
+ if(current<episodes.length-1)openEpisode(current+1);
+ else alert("Season 1 Complete! Season 2 coming soon.");
+}
+function previous(){
+ if(current>0)openEpisode(current-1);
+}
+function action(type,btn){
+ document.querySelectorAll(".actions button").forEach(x=>x.classList.remove("active"));
+ btn.classList.add("active");
+ const figure=document.getElementById("figure");
+ const power=document.getElementById("powerText");
+ figure.className="figure";
+ if(type==="normal"){
+ figure.innerText="🧑🏻";power.innerText="Level 000 • No Power";
+ }
+ if(type==="power"){
+ figure.innerText="🧑🏻‍🚀";figure.classList.add("glow");
+ power.innerText="Level 001 • Awakening";
+ }
+ if(type==="attack"){
+ figure.innerText="⚔️";figure.classList.add("shake");
+ power.innerText="Rule Break • Attack";
+ }
+ if(type==="defence"){
+ figure.innerText="🛡️";figure.classList.add("glow");
+ power.innerText="Defence Mode Activated";
+ }
+ if(type==="ultimate"){
+ figure.innerText="🌌";figure.classList.add("glow");
+ power.innerText="ZERO ORIGIN • Ultimate";
+ }
+}
+buildEpisodes();
+</script>
+</body>
+</html>
